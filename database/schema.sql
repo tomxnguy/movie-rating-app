@@ -6,7 +6,7 @@ drop schema "public" cascade;
 
 create schema "public";
 
-create table "public"."movies" (
+create table "movies" (
   "movieId"      serial,
   "title"        text           not null,
   "summary"      text           not null,

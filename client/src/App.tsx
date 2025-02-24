@@ -1,13 +1,53 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { readMovies } from "./api.ts";
 
-import "./App.css";
+export type Movie = {
+  movieId: number;
+  title: string;
+  summary: string;
+  imdbLink: string;
+  rating: number;
+};
 
-function App() {
+export default function MovieList() {
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    async function getMovies() {
+      try {
+        const movieData = await readMovies();
+        console.log("Fetched movies:", movieData);
+        setMovies(movieData);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getMovies();
+  }, []);
+
   return (
-    <>
-      <h1 className="text-3xl text-red-700"> movie rating app</h1>
-    </>
+    <div>
+      <h2>Movie List</h2>
+      {movies.length === 0 ? (
+        <p>No movies found.</p>
+      ) : (
+        <ul>
+          {movies.map((movie) => (
+            <li key={movie.movieId}>
+              <h3>{movie.title}</h3>
+              <p>{movie.summary}</p>
+              <a
+                href={movie.imdbLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                IMDb
+              </a>
+              <p>Rating: {movie.rating}/5</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
-
-export default App;
