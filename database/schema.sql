@@ -6,6 +6,14 @@ drop schema "public" cascade;
 
 create schema "public";
 
+create table "public"."users"(
+  "userId" serial,
+  "username" text not null,
+  "password" text not null check (length(username) >= 3),
+  "createdAt" timestampz(6) not null default now(),
+  "updatedAt" timestampz(6) not null default now(),
+)
+
 create table "public"."movies" (
   "movieId"      serial,
   "title"        text           not null,
